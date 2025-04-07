@@ -1,33 +1,27 @@
-import './App.css';
+import { Show } from '@chakra-ui/icons';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import { useState } from 'react';
+import { Footer } from '~/layout/footer/Footer.tsx';
+import { Header } from '~/layout/Header.tsx';
+import { Main } from '~/layout/Main.tsx';
+import { NavMenu } from '~/layout/NavMenu.tsx';
+import { SideBar } from '~/layout/SideBar.tsx';
 
-import reactLogo from '~/assets/react.svg';
-import { useGetPostsQuery } from '~/query/services/posts.ts';
+import { theme } from '../styles/theme.ts';
 
 function App() {
-    const [count, setCount] = useState(0);
-    const { data: _data, isLoading: _isLoading } = useGetPostsQuery();
-
     return (
-        <>
-            <div>
-                <a href='https://vite.dev' target='_blank'>
-                    <img src='/vite.svg' className='logo' alt='Vite logo' />
-                </a>
-                <a href='https://react.dev' target='_blank'>
-                    <img src={reactLogo} className='logo react' alt='React logo' />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className='card'>
-                <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-        </>
+        <ChakraProvider theme={theme}>
+            <Header />
+            <Main />
+            <Show above='xl'>
+                <NavMenu />
+                <SideBar />
+            </Show>
+            <Show below='xl'>
+                <Footer />
+            </Show>
+        </ChakraProvider>
     );
 }
 
