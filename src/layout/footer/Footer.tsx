@@ -12,6 +12,11 @@ export const Footer = () => (
         alignItems='center'
         justifyItems='center'
         data-test-id='footer'
+        pos='fixed'
+        bottom={0}
+        left={0}
+        right={0}
+        zIndex={10}
     >
         {footerItems.map((item) => (
             <FooterItem key={item.id} text={item.text} isActive={item.isActive}>

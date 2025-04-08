@@ -39,15 +39,14 @@ export const PageHeaderWithSearch = ({ title, children }: Props) => (
             gap={3}
             width={{ base: '100%', md: 'auto' }}
             mt={{ base: 4, xl: 8 }}
-            mb={{ base: 0, xl: 8 }}
+            mb={{ base: 0, xl: 4 }}
         >
             <IconButton
-                _hover={{ background: 'none' }}
                 aria-label='Filter'
                 variant='outline'
-                icon={<Filter size={{ base: 'sm', xl: 'lg' }} />}
-                size={{ base: 'sm', xl: 'lg' }}
-                w={{ base: '2rem', xl: '4rem' }}
+                icon={<Filter boxSize={{ base: '14px', xl: '24px' }} />}
+                boxSize={{ base: '32px', xl: '48px' }}
+                border='1px solid rgba(0, 0, 0, 0.48)'
             />
             <InputGroup flex='1' w={{ md: '404px', xl: '458px' }} alignItems='center'>
                 <Input
@@ -55,6 +54,7 @@ export const PageHeaderWithSearch = ({ title, children }: Props) => (
                     _placeholder={{ color: 'lime.800' }}
                     width='100%'
                     size={{ base: 'sm', xl: 'lg' }}
+                    border='1px solid rgba(0, 0, 0, 0.48)'
                 />
                 <InputRightElement
                     cursor='pointer'
@@ -67,13 +67,25 @@ export const PageHeaderWithSearch = ({ title, children }: Props) => (
         </Flex>
         <Show above='xl'>
             <Flex minW='518px' gap='16px'>
-                <FormControl display='flex' alignItems='center'>
+                <FormControl
+                    display='flex'
+                    alignItems='center'
+                    flexGrow={1}
+                    justifyContent='flex-end'
+                >
                     <FormLabel htmlFor='removeAllergens' mb='0' fontWeight={500}>
                         Исключить мои аллергены
                     </FormLabel>
-                    <Switch id='removeAllergens' colorScheme='gray' />
+                    <Switch id='removeAllergens' />
                 </FormControl>
-                <Select placeholder='Выберите из списка...' size='md' />
+                <Select
+                    placeholder='Выберите из списка...'
+                    size='md'
+                    border='1px solid rgba(0, 0, 0, 0.08)'
+                    color='blackAlpha.700'
+                    w='234px'
+                    flexShrink={0}
+                />
             </Flex>
         </Show>
     </Flex>

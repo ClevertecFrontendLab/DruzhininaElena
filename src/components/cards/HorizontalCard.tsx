@@ -42,7 +42,7 @@ export const HorizontalCard = ({
                 '0 2px 4px -1px rgba(32, 126, 0, 0.06), 0 4px 6px -1px rgba(32, 126, 0, 0.1)',
         }}
     >
-        <Box h={{ base: '128px', xl: '230px' }} overflow='hidden'>
+        <Box h={{ base: '128px', xl: '230px', '2xl': '244px' }} overflow='hidden'>
             <Image
                 src={img}
                 alt={altImg}
