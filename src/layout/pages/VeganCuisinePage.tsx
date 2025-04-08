@@ -18,7 +18,7 @@ export const VeganCuisinePage = () => (
             onClick={() => {}}
             displayButton='block'
             buttonTitle='Загрузить еще'
-            sizeButton='sm'
+            sizeButton='md'
             mainSectionData={veganCuisinePageMainCardsData}
         />
         <LastSection

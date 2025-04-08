@@ -12,7 +12,7 @@ export const TheJuciestPage = () => (
             onClick={() => {}}
             displayButton='block'
             buttonTitle='Загрузить еще'
-            sizeButton='sm'
+            sizeButton='md'
             mainSectionData={theJuciestPageMainCardsData}
         />
         <LastSection
