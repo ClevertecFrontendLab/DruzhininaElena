@@ -142,11 +142,32 @@ export const Filter = ({ open, handleClose }: Props) => {
                 </Box>
 
                 <DrawerBody
-                    p={{ base: '16px 20px 16px 16px', xl: '32px' }}
+                    p={{ base: '16px 26px 16px 16px', xl: '32px 42px 32px 32px' }}
                     display='flex'
                     flexDirection='column'
-                    overflowY='scroll'
+                    overflowY='auto'
                     position='relative'
+                    sx={{
+                        '&::-webkit-scrollbar': {
+                            width: '16px',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#00000028',
+                            borderRadius: '8px',
+                            border: '5px solid transparent',
+                            backgroundClip: 'content-box',
+                            width: '6px',
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            backgroundColor: '#0000000A',
+                            border: '5px solid transparent',
+                            backgroundClip: 'content-box',
+                            width: '6px',
+                        },
+                        '&::-webkit-scrollbar-button': {
+                            display: 'none',
+                        },
+                    }}
                 >
                     <Flex direction='column' gap={{ base: 4, xl: 6 }} flex='1'>
                         <CustomMultiSelect

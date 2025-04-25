@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { LastSection } from '~/common/components/lastSection/LastSection.tsx';
@@ -13,10 +14,51 @@ export const CategoryPage = () => {
     const categories = useAppSelector(selectCategories);
     const recipes = useAppSelector(selectAllRecipes);
     const filter = useAppSelector(selectFilters);
-
     const { category, subcategory } = useParams<{ category: string; subcategory: string }>();
 
+    const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
+    const [isNothingFound, setIsNothingFound] = useState(false);
+
     const currentCategory = categories.find((c) => c.id === category);
+
+    const filterRecipes = useCallback(() => {
+        let result = [];
+
+        if (category && subcategory) {
+            result = recipes.filter(
+                (rec) => rec.category.includes(category) && rec.subcategory.includes(subcategory),
+            );
+        }
+
+        if (filter.isSearchModeOnPage) {
+            if (filter.searchQuery) {
+                result = result.filter((r) => r.title.toLowerCase().includes(filter.searchQuery));
+            }
+            if (filter.pageAllergenFilter.excludedAllergens.length) {
+                result = result.filter(
+                    (recipe) =>
+                        !recipe.ingredients.some((ingredient) =>
+                            filter.pageAllergenFilter.excludedAllergens.some((allergen) =>
+                                ingredient.title.toLowerCase().includes(allergen.toLowerCase()),
+                            ),
+                        ),
+                );
+            }
+        }
+
+        return result;
+    }, [category, subcategory, recipes, filter]);
+
+    useEffect(() => {
+        const result = filterRecipes();
+        setFilteredRecipes(result);
+
+        const hasActiveSearch =
+            filter.isSearchModeOnPage &&
+            (filter.searchQuery || filter.pageAllergenFilter.excludedAllergens.length > 0);
+
+        setIsNothingFound(result.length === 0 && hasActiveSearch);
+    }, [filterRecipes, filter]);
 
     if (!currentCategory) {
         return <div>Страница с категорией не найдена</div>;
@@ -24,35 +66,18 @@ export const CategoryPage = () => {
 
     const { name, description, subcategories } = currentCategory;
 
-    let filteredRecipes =
-        category && subcategory
-            ? recipes.filter(
-                  (rec) => rec.category.includes(category) && rec.subcategory.includes(subcategory),
-              )
-            : [];
-
-    if (filter.isSearchModeOnPage) {
-        if (filter.searchQuery) {
-            filteredRecipes = filteredRecipes.filter((r) =>
-                r.title.toLowerCase().includes(filter.searchQuery),
-            );
-        }
-        if (filter.pageAllergenFilter.excludedAllergens.length) {
-            filteredRecipes = filteredRecipes.filter(
-                (recipe) =>
-                    !recipe.ingredients.some((ingredient) =>
-                        filter.pageAllergenFilter.excludedAllergens.some((allergen) =>
-                            ingredient.title.toLowerCase().includes(allergen.toLowerCase()),
-                        ),
-                    ),
-            );
-        }
-    }
-
     return (
         <>
-            <PageHeaderWithSearch title={name}>{description}</PageHeaderWithSearch>
+            <PageHeaderWithSearch
+                title={name}
+                isNothingFound={isNothingFound}
+                setIsNothingFound={setIsNothingFound}
+            >
+                {description}
+            </PageHeaderWithSearch>
+
             <TabMenu subcategories={subcategories} />
+
             <MainSection
                 onClick={() => {}}
                 displayButton='block'
@@ -60,9 +85,10 @@ export const CategoryPage = () => {
                 sizeButton='md'
                 recipes={filteredRecipes}
             />
+
             <LastSection
                 title='Десерты, выпечка'
-                description='Без них невозможно представить себе ни современную, ни традиционную  кулинарию. Пироги и печенья, блины, пончики, вареники и, конечно, хлеб - рецепты изделий из теста многообразны и невероятно популярны.'
+                description='Без них невозможно представить себе ни современную, ни традиционную кулинарию.'
                 firstCardsData={dessertsData}
                 secondCardsData={dessertsDataShort}
             />

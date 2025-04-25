@@ -84,7 +84,7 @@ export const MainCard = ({
                 flexDirection='column'
                 flex='1'
             >
-                <Stack spacing={{ base: 2, xl: 6 }} flex='1'>
+                <Stack spacing={{ base: 2, xl: 6 }} flex='1' justifyContent='space-between'>
                     <Show above='xl'>
                         <Flex justify='space-between' alignItems='flex-start'>
                             <Flex direction='row' wrap='wrap' gap={2}>

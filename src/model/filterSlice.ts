@@ -58,9 +58,6 @@ const createAllergenReducers = (filterKey: 'pageAllergenFilter' | 'drawerAllerge
         state[filterKey].isActive = action.payload;
         if (!action.payload) {
             state[filterKey].excludedAllergens = [];
-            if (filterKey === 'pageAllergenFilter' && !state.searchQuery) {
-                state.isSearchModeOnPage = false;
-            }
         }
     },
     toggleAllergen: (state: FilterState, action: PayloadAction<string>) => {

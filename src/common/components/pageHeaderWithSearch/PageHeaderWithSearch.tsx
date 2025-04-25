@@ -11,7 +11,7 @@ import {
 import { ChangeEvent, KeyboardEvent, ReactNode, useCallback, useState } from 'react';
 
 import { AllergensFilter } from '~/common/components/allergensFilter/AllergensFilter.tsx';
-import { Filter } from '~/components/Filter.tsx';
+import { Filter } from '~/common/components/filter/Filter.tsx';
 import { FilterIcon } from '~/icons/otherIcons/FilterIcon.tsx';
 import { Search } from '~/icons/otherIcons/Search.tsx';
 import { resetFilters, setSearchQuery, toggleSearchModeOnPage } from '~/model/filterSlice.ts';
@@ -21,14 +21,21 @@ import { useAppDispatch, useAppSelector } from '~/store/hooks.ts';
 type Props = {
     title: string;
     children?: ReactNode;
+    isNothingFound?: boolean;
+    setIsNothingFound?: (value: boolean) => void;
 };
-export const PageHeaderWithSearch = ({ title, children }: Props) => {
+export const PageHeaderWithSearch = ({
+    title,
+    children,
+    isNothingFound,
+    setIsNothingFound,
+}: Props) => {
     const filter = useAppSelector(selectFilters);
     const dispatch = useAppDispatch();
 
+    const [searchQuery, setsSearchQuery] = useState('');
     const [openFilter, setOpenFilter] = useState<boolean>(false);
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
-    const [isInvalidQuery, setIsInvalidQuery] = useState<boolean>(false);
 
     const closeFilterMenuHandler = useCallback(() => {
         setOpenFilter(false);
@@ -43,15 +50,17 @@ export const PageHeaderWithSearch = ({ title, children }: Props) => {
     }, [dispatch]);
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setIsInvalidQuery(false);
-        dispatch(setSearchQuery(e.currentTarget.value.toLowerCase().trim()));
+        setIsNothingFound(false);
+        setsSearchQuery(e.currentTarget.value);
+        if (e.currentTarget.value === '') {
+            dispatch(setSearchQuery(''));
+        }
     };
 
     const searchHandler = () => {
-        if (filter.searchQuery.length >= 3) {
+        if (searchQuery.length >= 3) {
+            dispatch(setSearchQuery(searchQuery.toLowerCase().trim()));
             dispatch(toggleSearchModeOnPage(true));
-        } else {
-            setIsInvalidQuery(true);
         }
     };
 
@@ -60,7 +69,7 @@ export const PageHeaderWithSearch = ({ title, children }: Props) => {
     };
 
     const hasValue = filter.searchQuery.length > 0;
-    const isSearchDisabled = filter.searchQuery.length < 3;
+    const isSearchDisabled = searchQuery.length < 3;
     const shouldShowShadow =
         (isInputFocused || filter.pageAllergenFilter.isActive || hasValue) &&
         !filter.isSearchModeOnPage;
@@ -117,17 +126,19 @@ export const PageHeaderWithSearch = ({ title, children }: Props) => {
                         placeholder='Название или ингредиент...'
                         width='100%'
                         size={{ base: 'sm', xl: 'lg' }}
-                        border='1px solid rgba(0, 0, 0, 0.48)'
-                        value={filter.searchQuery}
+                        border={
+                            isNothingFound ? '2px solid #e53e3e' : '1px solid rgba(0, 0, 0, 0.48)'
+                        }
+                        value={searchQuery}
                         onChange={onChangeHandler}
                         onFocus={() => setIsInputFocused(true)}
                         onBlur={() => setIsInputFocused(false)}
                         _focus={{
-                            borderColor: isInvalidQuery ? 'red.500' : 'lime.600',
+                            borderColor: isNothingFound ? 'red.500' : 'lime.600',
                             boxShadow: 'none',
                         }}
                         onKeyDown={searchOnEnterHandler}
-                        isInvalid={isInvalidQuery}
+                        isInvalid={isNothingFound}
                         data-test-id='search-input'
                     />
                     <InputRightElement
