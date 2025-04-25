@@ -2,7 +2,7 @@
     "compilerOptions": {
         "baseUrl": ".",
         "traceResolution": true,
-        "types": ["node", "cypress"],
+        "types": ["node", "cypress", "@types/swiper"],
         "paths": {
             "~/*": ["./src/*"],
             "@public/*": ["./public/*"]

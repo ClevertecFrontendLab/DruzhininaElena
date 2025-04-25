@@ -16,7 +16,8 @@ export const Footer = () => (
         bottom={0}
         left={0}
         right={0}
-        zIndex={10}
+        zIndex={5}
+        display={{ base: 'flex', xl: 'none' }}
     >
         {footerItems.map((item) => (
             <FooterItem key={item.id} text={item.text} isActive={item.isActive}>

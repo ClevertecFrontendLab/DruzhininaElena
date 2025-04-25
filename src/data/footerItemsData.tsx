@@ -2,9 +2,9 @@ import { Icon } from '@chakra-ui/icons';
 import { Avatar, IconButton } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
-import { AddRecipe } from '~/icons/AddRecipe.tsx';
-import { Home } from '~/icons/Home.tsx';
-import { Search } from '~/icons/Search.tsx';
+import { AddRecipe } from '~/icons/otherIcons/AddRecipe.tsx';
+import { Home } from '~/icons/otherIcons/Home.tsx';
+import { Search } from '~/icons/otherIcons/Search.tsx';
 
 import avatar from '../assets/images/avatars/avatar.webp';
 
